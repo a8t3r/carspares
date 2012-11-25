@@ -1,0 +1,53 @@
+<div lift="surround?with=default;at=content" xmlns:lift="http://www.w3.org/1999/xhtml">
+    <head_merge>
+      <link rel="stylesheet" href="/css/bootstrap-image-gallery.min.css">
+      <script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+      <script src="/scripts/bootstrap-image-gallery.js"></script>
+
+      <script type="text/javascript" src="/scripts/jquery.ui.widget.min.js"></script>
+      <script type="text/javascript" src="/scripts/jquery.iframe-transport.js"></script>
+      <script type="text/javascript" src="/scripts/jquery.fileupload.js"></script>
+      <script type="text/javascript">
+        function dropImage(imageId) {
+            $("#image_" + imageId).remove();
+            $("#hidden_" + imageId).remove();
+        }
+
+        $(function(){
+            $("#file-upload").fileupload({dataType:'json', url:'/uploading', dropZone:$('#image'),
+                done:function(e, data) {
+                    var name = data.result.name;
+
+                    $("#gallery").append("<a id='image_" + name + "' href='/download/" + name + "' rel='gallery'><img src='/serving/" + name + "' height='100' width='100' /></a>");
+                    $("#fileIds").append("<option value='" + name + "' id='hidden_" + name + "' selected />");
+                }
+            });
+        });
+      </script>
+    </head_merge>
+
+    <!-- modal-gallery is the modal dialog used for the image gallery -->
+    <div id="modal-gallery" class="modal modal-gallery hide fade" tabindex="-1">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3 class="modal-title"></h3>
+        </div>
+        <div class="modal-body"><div class="modal-image"></div></div>
+        <div class="modal-footer">
+            <a class="btn btn-primary modal-next">Следующая <i class="icon-arrow-right icon-white"></i></a>
+            <a class="btn btn-info modal-prev"><i class="icon-arrow-left icon-white"></i> Предыдущая</a>
+            <a class="btn modal-download" target="_blank"><i class="icon-download"></i> Скачать изображение</a>
+            <a class="btn model-image-remove"><i class="icon-remove"></i> Удалить изображение</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="offerForm"></div>
+        <div>
+            <form id="file-upload" action="/uploading" method="POST" enctype="multipart/form-data">
+                <input id="lefile" type="file" style="display:none" accept="image/*"/>
+            </form>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,14 @@
+.DS_Store
+.cache/
+Thumbs.db
+
+.idea/
+*.iml
+
+target
+project/project
+
+src/main/resources/props/production.default.props
+src/main/resources/production.default.logback.xml
+build.sh
+.history

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <title>Home</title>
+</head>
+<body class="lift:content_id=main">
+<div id="main" class="lift:surround?with=default;at=content">
+    <span class="lift:tail">
+      <script type="text/javascript" src="scripts/jquery.ui.widget.min.js"></script>
+      <script type="text/javascript" src="scripts/jquery.iframe-transport.js"></script>
+      <script type="text/javascript" src="scripts/jquery.fileupload.js"></script>
+    </span>
+    <script type="text/javascript">
+
+        function dropImage(imageId) {
+            var images = document.getElementById('image');
+            var image = document.getElementById("image_" + imageId);
+            images.removeChild(image)
+
+            var files = document.getElementById('files');
+            var label = document.getElementById("label_" + imageId);
+            files.removeChild(label)
+        }
+
+        // <![CDATA[
+        $(function(){
+            $("#file-upload").fileupload({dataType:'json', url:'/uploading', dropZone:$('#image'),
+                done:function(e, data) {
+                    $("#image").append("<img id='image_" + data.result.name + "' src='serving/" + data.result.name + "' height='100' width='100' />");
+                    $("#files").append("<label id='label_" + data.result.name +"'><i class='icon-remove' onclick='dropImage(\"" + data.result.name + "\")'></i> " + data.result.filename + "</label>")
+                }
+            });
+        });
+        // ]]>
+    </script>
+    <div id="image" style="width:640px; height:100px;"></div>
+    <form id="file-upload" action="/uploading" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file[]" />
+        <div id="files"></div>
+    </form>
+</div>
+</body>
+</html>

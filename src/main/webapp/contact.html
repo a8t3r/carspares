@@ -1,0 +1,55 @@
+<div lift="surround?with=default;at=content">
+  <div class="row">
+    <div class="span5">
+        <table class="table table-striped table-bordered">
+            <tbody><tr>
+                <td width="200px"><strong>Имя</strong></td>
+                <td><span id="id_name">Веселов Павел</span></td>
+            </tr>
+            <tr>
+                <td><strong>Мобильный телефон</strong></td>
+                <td><span id="id_mobilePhone">+7 (910) 104 63 38</span></td>
+            </tr>
+            <tr>
+                <td><strong>Электронная почта</strong></td>
+                <td><span id="id_email">carspares.sochi@gmail.com</span></td>
+            </tr>
+            <tr>
+                <td><strong>Местоположение</strong></td>
+                <td><span id="id_location">Сочи, Кудепста</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span7">
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3.4&sensor=false&language=en"></script>
+        <script type="text/javascript">
+            function drawmap(locations) {
+                var myOptions = {
+                    zoom: 12,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+                initialLocation = new google.maps.LatLng(locations.loc[0].lat, locations.loc[0].lng);
+                map.setCenter(initialLocation);
+                for(i=0; i<locations.loc.length; i++) {
+                    var point = new google.maps.LatLng(locations.loc[i].lat,locations.loc[i].lng);
+
+                    var marker = new google.maps.Marker({
+                        position: point,
+                        title: locations.loc[i].title });
+                    marker.setMap(map);
+                }
+            }
+
+        </script>
+        <p valign=center align=center>
+          <span class="lift:helloWorld.howdy">
+              <div id="map_canvas" style="height: 480px"></div>
+          </span>
+        </p>
+
+    </div>
+  </div>
+</div>
+

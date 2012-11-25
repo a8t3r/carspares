@@ -1,0 +1,27 @@
+<div lift="surround?with=base-wrap;at=content" xmlns:lift="http://www.w3.org/1999/xhtml">
+    <lift:head>
+        <title lift="Menu.title">CarSpares: %*%</title>
+    </lift:head>
+    <span lift="CurrentUser.title"></span>
+    <div class="main-content">
+        <div class="page-header">
+            <a href="/offers/create" class="btn-primary btn-large">
+                <lift:loc locid="createOffer"/>
+            </a>
+        </div>
+        <div class="row">
+            <div class="span12">
+                <div lift="Notices"></div>
+                <ul class="nav nav-tabs">
+                    <span lift="GroupMenu?group=details;current_class=active"></span>
+                </ul>
+            </div>
+            <div class="span12">
+                <div id="content"></div>
+            </div>
+            <div class="span2">
+            </div>
+        </div>
+    </div>
+    <span lift="embed?what=/templates-hidden/parts/footer"></span>
+</div>

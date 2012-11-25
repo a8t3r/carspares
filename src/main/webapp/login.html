@@ -1,0 +1,68 @@
+<div lift="surround?with=default;at=content" xmlns:lift="">
+  <div lift="Notices"></div>
+  <div class="row">
+    <div class="span6">
+      <form lift="Form.ajax?class=form-horizontal">
+        <span lift="UserLogin">
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="email"></label>
+              <div class="controls">
+                <p><strong><lift:loc locid="enter_email">Enter your email address:</lift:loc></strong></p>
+                <input class="xlarge" maxlength="254" id="id_email" size="32" name="email" type="text" value="" />
+                <span lift="Notices.id?id=id_email_err"></span>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <p><strong><lift:loc locid="have_account">Do you have a lift-mongo-app password?</lift:loc></strong><br>
+                <small>Если Вы забыли свой пароль, то укажите "Нет"</small>
+                </p>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <input id="no_password"/> <span><lift:loc locid="no_account">No, help me log in.</lift:loc></span>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <input id="yes_password"/> <span><lift:loc locid="yes_account">Yes, I have a <strong>password</strong></lift:loc></span>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <input class="xlarge" id="id_password" />
+                <span lift="Notices.id?id=id_password_err"></span>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="remember"></label>
+              <div class="controls">
+                <label class="checkbox">
+                  <input class="xlarge" name="remember" />
+                  <lift:loc locid="remember_me">Remember me when I come back later.</lift:loc>
+                </label>
+              </div>
+            </div>
+          </fieldset>
+          <div class="controls">
+            <input id="id_submit" />
+              <!-- Attribute localization http://www.assembla.com/spaces/liftweb/tickets/1159-localization-of-attribute-values -->
+              <input type="submit" class="btn btn-primary" value="Подтвердить"/>
+              <span lift="Menu.item?name=Home;a:class=btn"><lift:loc locid="Cancel">Cancel</lift:loc></span>
+          </div>
+        </span>
+      </form>
+    </div>
+    <div class="span4">
+        <p><strong>Вы можете войти через аккаунт социальной сети:</strong></p>
+        <span lift="LoginzaSnippet"></span>
+    </div>
+  </div>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    app.login.startMonitor();
+  });
+  </script>
+</div>

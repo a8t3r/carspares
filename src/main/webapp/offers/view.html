@@ -1,0 +1,92 @@
+<div lift="surround?with=base-wrap;at=content" xmlns:lift="">
+    <head_merge>
+        <link rel="stylesheet" href="/css/bootstrap-image-gallery.min.css">
+        <script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+        <script src="/scripts/bootstrap-image-gallery.js"></script>
+
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'carspares'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </head_merge>
+    <div class="main-content">
+        <div lift="OfferView.view" class="row">
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span6">
+                        <table class="table table-hover">
+                            <tr>
+                                <td width="200px"><strong><lift:loc locid="dealType"/></strong></td>
+                                <td><span id="id_dealType"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong><lift:loc locid="title"/></strong></td>
+                                <td><span id="id_name"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong><lift:loc locid="description"/></strong></td>
+                                <td><span id="id_description"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong><lift:loc locid="amount"/></strong></td>
+                                <td><span id="id_amount"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong><lift:loc locid="estimatedPrice"/></strong></td>
+                                <td><span id="id_price"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong><lift:loc locid="creator"/></strong></td>
+                                <td><span id="id_creator"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong><lift:loc locid="status"/></strong></td>
+                                <td><span id="id_status"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Дата создания</strong></td>
+                                <td><span id="id_created"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Дата изменения</strong></td>
+                                <td><span id="id_updated"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="span4">
+                        <div id="id_buttonsGroup">Hello, world!</div>
+                        <p>
+                            <div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery"></div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="disqus_thread"></div>
+
+        <!-- modal-gallery is the modal dialog used for the image gallery -->
+        <div id="modal-gallery" class="modal modal-gallery hide fade" tabindex="-1">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h3 class="modal-title"></h3>
+            </div>
+            <div class="modal-body"><div class="modal-image"></div></div>
+            <div class="modal-footer">
+                <a class="btn btn-primary modal-next">Следующая <i class="icon-arrow-right icon-white"></i></a>
+                <a class="btn btn-info modal-prev"><i class="icon-arrow-left icon-white"></i> Предыдущая</a>
+                <a class="btn modal-download" target="_blank"><i class="icon-download"></i> Скачать изображение</a>
+            </div>
+        </div>
+
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+    <span lift="embed?what=/templates-hidden/parts/footer"></span>
+</div>
