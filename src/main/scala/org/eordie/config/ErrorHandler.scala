@@ -39,6 +39,7 @@ object ErrorHandler extends Factory with Loggable {
 
     MDC.put(("UserId", User.currentUserId openOr "GUEST"))
     MDC.put(("Username", User.currentUser.map(_.username.is) openOr "GUEST"))
+    MDC.put(("User Ip", r.remoteAddr))
     MDC.put(("User Agent", r.userAgent openOr "UNKNOWN"))
     MDC.put(("Server", srvr))
     logger.error("Exception occurred while processing %s".format(r.uri), e)
