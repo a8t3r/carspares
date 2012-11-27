@@ -49,7 +49,7 @@ class OfferView extends Loggable {
     ajaxButton(Text(textMessage), {() =>
       val purchaserBox: Box[User] = User.find(offer.purchaser.get)
       if (purchaserBox.isEmpty) createRespond else cancelRespond
-    }, "class" -> "btn btn-primary btn-large")
+    }, "class" -> "btn btn-primary btn-large", "id" -> "id_editlink")
   }
 
   def respond_button: NodeSeq = {
