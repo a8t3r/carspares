@@ -37,7 +37,7 @@ object OfferSnips {
 
       def doFields(html: NodeSeq): NodeSeq =
         for {
-          pointer <- (Offer.fieldsForEditing ::: List(Offer.images))
+          pointer <- Offer.fieldsForEditing
           field <- item.fieldByName(pointer.name).toList
           if field.show_?
           form <- field.toForm.toList

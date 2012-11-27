@@ -115,6 +115,8 @@ class OfferView extends Loggable {
           }
         }
       }
+
+      case _ => NodeSeq.Empty
     }
 
     val images: NodeSeq = OfferSnips.imageNodes(offer.images)

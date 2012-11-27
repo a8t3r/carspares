@@ -221,18 +221,9 @@ object Offer extends Offer with MongoMetaRecord[Offer] with MongoCRUDify[Offer] 
 
   override def createMenuLoc = Empty
 
+  override def fieldsForEditing = List(dealType, title, description, amount, realPrice, creator, purchaser, images)
+
   override def fieldsForList = List(Offer.dealType, Offer.title, Offer.amount, Offer.realPrice, Offer.creator, Offer.purchaser, Offer.status)
 
-  private def clientShowFields: List[Field[_, Offer]] = List(dealType, title, description, amount, realPrice, creator, purchaser)
-
-  private def managerShowFields: List[Field[_, Offer]] = List(dealType, title, description, amount, estimatedPrice, purchasePrice, realPrice, creator, purchaser, status)
-
-  override def fieldsForDisplay = {
-    fieldsForEditing ::: List[Field[_, Offer]](createdAt, updatedAt)
-  }
-
-  override def fieldsForEditing = {
-    if (User.hasRole("manager")) managerShowFields
-    else clientShowFields
-  }
+  override def fieldsForDisplay = fieldsForEditing ::: List[Field[_, Offer]](createdAt, updatedAt)
 }
