@@ -71,12 +71,6 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
     override def validations = List((f: ValueType) => positive(f))
   }
 
-  // Покупочная цена
-  object purchasePrice extends MoneyField(this) with Localization
-
-  // Планируемая цена продажи
-  object estimatedPrice extends MoneyField(this) with Localization
-
   // Действительная цена продажи
   object realPrice extends MoneyField(this) with Localization
 

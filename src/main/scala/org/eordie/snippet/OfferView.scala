@@ -125,7 +125,7 @@ class OfferView extends Loggable {
     "#id_name *" #> offer.title.asHtml &
     "#id_description" #> offer.description.asHtml &
     "#id_amount" #> offer.amount &
-    "#id_price" #> offer.estimatedPrice.viewString &
+    "#id_price" #> offer.realPrice.viewString &
     "#id_creator" #> offer.creator.asHtml &
     "#id_status" #> offer.status.asHtml &
     "#id_created" #> offer.createdAt &

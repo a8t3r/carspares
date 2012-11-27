@@ -46,7 +46,7 @@ class GuestTable {
           <p>
             <small>{DateHelper.yesterdayOrToday(o.updatedAt.is)}</small><br/>
             <span class="label label-info">
-              {o.estimatedPrice.viewString}
+              {o.realPrice.viewString}
             </span>
           </p>
         </td>
