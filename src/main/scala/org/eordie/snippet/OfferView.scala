@@ -6,7 +6,7 @@ import org.eordie.model.car.{OfferStatus, Offer}
 import net.liftweb.util.Helpers._
 import org.eordie.model.user.{SystemUser, User}
 import net.liftweb.common.{Loggable, Full, Empty, Box}
-import xml.{Elem, Text, NodeSeq}
+import xml.{MetaData, Elem, Text, NodeSeq}
 import net.liftweb.http.js.JsCmds.{RedirectTo, SetHtml}
 import net.liftweb.http.js.{JsCommands, JsCmd}
 import org.eordie.config.Site
@@ -49,10 +49,15 @@ class OfferView extends Loggable {
     ajaxButton(Text(textMessage), {() =>
       val purchaserBox: Box[User] = User.find(offer.purchaser.get)
       if (purchaserBox.isEmpty) createRespond else cancelRespond
-    }, "class" -> "btn btn-primary btn-large", "id" -> "id_editlink")
+    }, largePrimary, "id" -> "id_editlink")
   }
 
-  def respond_button: NodeSeq = {
+  private val largePrimary = {
+    ("class" -> "btn btn-primary btn-large")
+  }
+
+  // Откликнуться
+  def respond_button: Elem = {
     val purchaserBox: Box[User] = User.find(offer.purchaser.get)
 
     purchaserBox match {
@@ -77,38 +82,41 @@ class OfferView extends Loggable {
     )
   }
 
-  def editLink: NodeSeq =
-    if (offer.isEditable) {
-      val href = "/offers/edit/" + offer.id
-      <a href={href}>{S ? "offer_do_edition"}</a>
-    } else <a href="#" class="disabled">Нет доступных операций</a>
-
-  def closeLink: NodeSeq = {
-    if (offer.hasPurchaser) {
-      SHtml.a(() => changeStatus(OfferStatus.completed), Text(S ? "offer_completed_status"))
-    } else {
-      if (offer.isCreator) {
-        offer.status.is match {
-          case OfferStatus.open => SHtml.a(() => changeStatus(OfferStatus.closed), Text(S ? "offer_close_status"))
-          case OfferStatus.closed => SHtml.a(() => changeStatus(OfferStatus.open), Text(S ? "offer_open_status"))
-          case _ => NodeSeq.Empty
-        }
-      } else NodeSeq.Empty
+  def changeStatusLink: NodeSeq = {
+    offer.status.is match {
+      case OfferStatus.open => SHtml.a(() => changeStatus(OfferStatus.closed), Text(S ? "offer_close_status"))
+      case OfferStatus.closed => SHtml.a(() => changeStatus(OfferStatus.open), Text(S ? "offer_open_status"))
+      case _ => NodeSeq.Empty
     }
+  }
+
+  // Редактировать
+  def editLink: Elem = {
+    val href = "/offers/edit/" + offer.id
+    <a href={href}>{S ? "offer_do_edition"}</a>
   }
 
   def view = {
 
-    val buttonsGroup = {
-      if (User.currentUser.isEmpty) <a class="btn btn-primary btn-large" href="/login">Для операций требуется вход</a>
-      else {
-        if (offer.isCompleted) {
-          <span class="btn btn-primary btn-large disabled">{S ? "offer_completed"}</span>
-        } else {
-          wrap()
+    val buttonsGroup = User.currentUser match {
+      case Empty => <a href="/login">{S ? "login_required"}</a> % largePrimary
+      case Full(x) => {
+        if (offer.isCompleted) <span>{S ? "offer_completed"}</span> % largePrimary
+        else {
+          if (offer.isCreator(x)) {
+            if (offer.hasPurchaser) {
+              SHtml.a(() => changeStatus(OfferStatus.completed), Text(S ? "offer_completed_status"), largePrimary)
+            } else {
+              wrap(editLink, changeStatusLink)
+            }
+          } else {
+            if (SystemUser.isSystem(x)) wrap(respond_button, editLink)
+            else respond_button
+          }
         }
       }
     }
+
     val images: NodeSeq = OfferSnips.imageNodes(offer.images)
 
     "#id_dealType" #> offer.dealType &
@@ -124,13 +132,12 @@ class OfferView extends Loggable {
     "#gallery" #> <div>{images}</div>
   }
 
-  private def wrap(): NodeSeq = {
+  private def wrap(first: Elem, second: NodeSeq): NodeSeq = {
     <div class="btn-group">
-      {if (offer.isCreator) <button class="btn btn-primary btn-large">{S ? "offer_operations"}</button> else respond_button}
+      {first % largePrimary}
       <button class="btn btn-primary btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <li>{closeLink}</li>
-        <li>{editLink}</li>
+        <li>{second}</li>
       </ul>
     </div>
   }

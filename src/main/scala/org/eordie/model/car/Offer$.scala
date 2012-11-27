@@ -192,8 +192,9 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
 
   def isCompleted = OfferStatus.completed == status.is
 
-  // Является ли текущий пользователь создателем объявления
-  def isCreator = User.isCurrentUser(User.find(creator.is))
+  def isCreator(user: User) = User.find(creator.is)
+    .map(_.userIdAsString == user.userIdAsString)
+    .openOr(false)
 
   def isEditable: Boolean = {
     User.find(creator.is)
