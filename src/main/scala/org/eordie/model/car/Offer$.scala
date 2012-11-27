@@ -17,6 +17,7 @@ import net.liftweb.util.FieldError
 import net.liftweb.http.S._
 import net.liftweb.common.Full
 import net.liftweb.util.Helpers._
+import org.joda.time.format.DateTimeFormat
 
 /**
  *
@@ -26,7 +27,7 @@ import net.liftweb.util.Helpers._
 class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
   def meta = Offer
 
-  val df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+  lazy val df = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm")
   def now: Date = Calendar.getInstance().getTime
 
   // Тип предложения
@@ -115,7 +116,7 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
   // Дата создания
   object createdAt extends DateField(this) with Localization with LifecycleCallbacks {
     override def asHtml = {
-      Text(df.format(get))
+      Text(df.print(get.getTime))
     }
 
     override def beforeCreate {
@@ -127,7 +128,7 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
   // Дата обновления
   object updatedAt extends DateField(this) with Localization with LifecycleCallbacks {
     override def asHtml = {
-      Text(df.format(get))
+      Text(df.print(get.getTime))
     }
 
     override def beforeSave {
