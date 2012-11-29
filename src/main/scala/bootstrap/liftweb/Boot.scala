@@ -8,7 +8,7 @@ import util._
 
 import org.eordie._
 import config._
-import lib.{LoginzaHandler, UploadManager, Gravatar}
+import lib.{RSSFeed, LoginzaHandler, UploadManager, Gravatar}
 import model.user.{SystemUser, User}
 import snippet.Notices
 
@@ -75,6 +75,8 @@ class Boot extends Loggable {
 
     // loginza oauth request
     LiftRules.dispatch.append(LoginzaHandler)
+
+    LiftRules.dispatch.append(RSSFeed.dispatch)
 
     // Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =

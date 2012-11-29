@@ -46,7 +46,7 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
 
     override def validations = valMinLen(3, "Слишком короткое название") _ :: super.validations
 
-    override def asHtml = <a href={S.hostAndPath + "/offers/view/" + id + "#disqus_thread"}>{get}</a>
+    override def asHtml = <a href={viewHref}>{get}</a>
 
     override def toForm = Full(S.fmapFunc(SFuncHolder(this.setFromAny(_))) {
       funcName => <input type="text" maxlength={maxLength.toString}
@@ -57,6 +57,8 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
                     tabindex={tabIndex.toString}/>
     })
   }
+
+  def viewHref: String = S.hostAndPath + "/offers/view/" + id + "#disqus_thread"
 
   // Описание детали
   object description extends TextareaField(this, 512) with Localization
