@@ -22,7 +22,7 @@ class OfferView extends Loggable {
 
   lazy val offer: Offer = Offer.find(id).openOr(S.redirectTo("/404"))
 
-  def header = <h2>{offer.title}</h2>
+  def title = <title>Carspares: {offer.title.is}</title>
 
   // Отклик
   def createRespond: JsCmd = {
