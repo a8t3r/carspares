@@ -1,7 +1,7 @@
 package org.eordie.lib
 
 import net.liftweb.http._
-import org.eordie.model.car.Offer
+import org.eordie.model.car.{OfferType, Offer}
 import net.liftweb.http.rest.XMLApiHelper
 import xml.NodeSeq
 
@@ -18,7 +18,7 @@ object RSSFeed extends XMLApiHelper {
   }
 
   def showOffers(): LiftResponse = {
-    val elems: NodeSeq = (for (offer <- Offer.findAll) yield
+    val elems: NodeSeq = (for (offer <- OfferType.managerOffers) yield
       <item>
         <title>{offer.title.is}</title>
         <description>{offer.description.is}</description>
