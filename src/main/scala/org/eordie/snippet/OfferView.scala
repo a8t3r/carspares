@@ -65,7 +65,7 @@ class OfferView extends Loggable {
       case Empty => createButton(subscribe = true)
 
       // Если покупатель - текущий пользователь, то ссылка на отписку
-      case Full(user) if (user.userIdAsString == User.currentUser.openTheBox.userIdAsString) => createButton(subscribe = false)
+      case Full(user) if (SystemUser.isSystem(user)) => createButton(subscribe = false)
 
       // В прочих случаях ничего не делать
       case _ => <b>{S ? "no_subscribe"}</b>
@@ -105,7 +105,14 @@ class OfferView extends Loggable {
         else {
           if (offer.isCreator(x)) {
             if (offer.hasPurchaser) {
-              SHtml.a(() => changeStatus(OfferStatus.completed), Text(S ? "offer_completed_status"), largePrimary)
+              wrap(
+                SHtml.a(() => changeStatus(OfferStatus.completed), Text(S ? "offer_completed_status")),
+                SHtml.a(() => {
+                  offer.purchaser.clear
+                  offer.save
+                  S.redirectTo("/offers/myoffers", () => S.notice(S ? ("offer_cancel_status_done", offer.title)))
+                }, Text(S ? "offer_cancel_status"))
+              )
             } else {
               wrap(editLink, changeStatusLink)
             }
