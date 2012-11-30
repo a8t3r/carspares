@@ -3,14 +3,17 @@ package config
 
 import net.liftweb._
 import common._
+import common.Full
 import json._
 import mongodb._
-import util.Props
+import net.liftweb.util.Props
 
-import com.mongodb.{DBObject, DBCursor, DBAddress, Mongo}
+import com.mongodb._
 import com.mongodb.gridfs._
 import model.car.Offer
 import collection.mutable
+import net.liftweb.util
+import scala.Some
 
 object MongoConfig extends Loggable {
   implicit val formats = DefaultFormats
@@ -27,6 +30,14 @@ object MongoConfig extends Loggable {
    * gets the MongoDB info from there if it is.
    */
   def init() {
+    def mongoOpts: MongoOptions = {
+      val opts: MongoOptions = new MongoOptions()
+      opts.autoConnectRetry = true
+      opts.connectionsPerHost = 30
+
+      opts
+    }
+
     Option(System.getenv("VCAP_SERVICES")) match {
       case Some(s) =>
         try {
@@ -79,7 +90,7 @@ object MongoConfig extends Loggable {
             logger.info("Connecting to " + defaultDbAddress + " with login " + user + " and password " + pwd)
             MongoDB.defineDbAuth(
               DefaultMongoIdentifier,
-              new Mongo(defaultDbAddress),
+              new Mongo(defaultDbAddress, mongoOpts),
               defaultDbAddress.getDBName,
               user,
               pwd
