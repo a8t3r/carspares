@@ -18,6 +18,7 @@ import net.liftweb.http.S._
 import net.liftweb.common.Full
 import net.liftweb.util.Helpers._
 import org.joda.time.format.DateTimeFormat
+import org.bson.types.ObjectId
 
 /**
  *
@@ -81,12 +82,7 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
   object creator extends ObjectIdRefField(this, User) with Localization {
     override def defaultValue = User.currentUser.openOr(SystemUser.user).id.is
 
-    override def asHtml = {
-      val userBox: Box[User] = User.find(get)
-      val userName = userBox.get.username.value
-      val href = S.hostAndPath + "/user/" + userName
-      <a href={href}>{userName}</a>
-    }
+    override def asHtml = userProfileLink(get)
   }
 
   // Покупатель
@@ -94,15 +90,21 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
 
     override def optional_? = true
 
-    override def asHtml = {
-      val userBox: Box[User] = User.find(get)
-      if (userBox.isEmpty) {
-        <b>{S ? "no_purchaser"}</b>
-      } else {
-        val userName = userBox.get.username.value
-        val href = "/user/" + userName
-        <a href={href}>{userName}</a>
-      }
+    override def asHtml = userProfileLink(get)
+  }
+
+  private def userProfileLink(oid: ObjectId): Elem = {
+    val userBox: Box[User] = User.find(oid)
+    if (userBox.isEmpty) {
+      <b>
+        {S ? "no_purchaser"}
+      </b>
+    } else {
+      val userName = userBox.get.username.value
+      val href = S.hostAndPath + "/user/" + userName
+      <a href={href}>
+        {userName}
+      </a>
     }
   }
 
