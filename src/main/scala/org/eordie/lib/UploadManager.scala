@@ -4,7 +4,7 @@ import net.liftweb.http._
 import net.liftweb.http.rest.RestHelper
 import net.liftweb.json.JsonAST.JValue
 import net.liftweb.json.JsonDSL._
-import net.liftweb.common.Box
+import net.liftweb.common.{Loggable, Box}
 import net.liftweb.util.StringHelpers
 import com.mongodb.gridfs.{GridFSInputFile, GridFSDBFile}
 import com.mongodb.BasicDBObject
@@ -12,6 +12,7 @@ import net.liftweb.http.BadResponse
 import net.liftweb.http.StreamingResponse
 import net.liftweb.http.InMemoryResponse
 import org.eordie.config.MongoConfig
+import org.eordie.model.car.Offer
 
 /**
  * Менеджер для загрузки файлов
@@ -19,13 +20,14 @@ import org.eordie.config.MongoConfig
  * @author Alexandr Kolosov
  * @since 10/24/12
  */
-object UploadManager extends RestHelper {
+object UploadManager extends RestHelper with Loggable {
 
   def clear(refs: List[String]) {
-    refs.foreach(clear(_))
+    refs.diff(Offer.findAll.flatMap(_.images.is)).foreach(clear(_))
   }
 
   def clear(ref: String) {
+    logger.info("Removing image ref " + ref)
     MongoConfig.mongoGridFS.remove(ref)
   }
 

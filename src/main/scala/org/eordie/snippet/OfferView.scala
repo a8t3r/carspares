@@ -117,7 +117,19 @@ class OfferView extends Loggable {
               wrap(editLink, changeStatusLink)
             }
           } else {
-            if (SystemUser.isSystem(x)) wrap(respond_button, editLink)
+            if (SystemUser.isSystem(x)) wrap(respond_button, editLink,
+              SHtml.a(() => {
+                val copy: Offer = Offer.createRecord
+                copy.title(offer.title.is + " (копия)")
+                copy.description(offer.description.is)
+                copy.amount(offer.amount.is)
+                copy.realPrice(offer.realPrice.is)
+                copy.images(offer.images.is)
+                copy.save
+
+                S.redirectTo("/offers/myoffers", () => S.notice(S ? ("create_offer_copy_done", copy.title)))
+              }, Text(S ? "create_offer_copy"))
+            )
             else respond_button
           }
         }
@@ -141,12 +153,13 @@ class OfferView extends Loggable {
     "#gallery" #> <div>{images}</div>
   }
 
-  private def wrap(first: Elem, second: NodeSeq): NodeSeq = {
+  private def wrap(first: Elem, second: NodeSeq, third: NodeSeq = NodeSeq.Empty): NodeSeq = {
     <div class="btn-group">
       {first % largePrimary}
       <button class="btn btn-primary btn-large dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
       <ul class="dropdown-menu">
         <li>{second}</li>
+        <li>{third}</li>
       </ul>
     </div>
   }
