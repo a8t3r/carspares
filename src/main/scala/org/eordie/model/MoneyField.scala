@@ -26,7 +26,7 @@ class MoneyField[OwnerType <: Record[OwnerType]](rec: OwnerType) extends Decimal
     else Nil
   }
 
-  def viewString: String = (this.is * 1000).toBigInt() + " рублей"
+  def viewString: String = if (this.is > 0) (this.is * 1000).toBigInt() + " рублей" else "не указана"
 
   override def validations = List((f: ValueType) => positive(f))
 
