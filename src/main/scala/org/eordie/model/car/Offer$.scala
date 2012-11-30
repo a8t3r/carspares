@@ -12,13 +12,13 @@ import scala._
 import net.liftweb.common.{Loggable, Empty, Box}
 import java.util.{Calendar, Date}
 import xml.{Elem, Text}
-import java.text.SimpleDateFormat
 import net.liftweb.util.FieldError
 import net.liftweb.http.S._
 import net.liftweb.common.Full
 import net.liftweb.util.Helpers._
 import org.joda.time.format.DateTimeFormat
 import org.bson.types.ObjectId
+import sun.util.calendar.ZoneInfo
 
 /**
  *
@@ -29,7 +29,9 @@ class Offer extends MongoRecord[Offer] with ObjectIdPk[Offer] with Loggable {
   def meta = Offer
 
   lazy val df = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm")
-  def now: Date = Calendar.getInstance().getTime
+  lazy val cal = Calendar.getInstance(ZoneInfo.getTimeZone("Europe/Moscow"))
+
+  def now: Date = cal.getTime
 
   // Тип предложения
   object dealType extends EnumField(this, DealType) with Localization {

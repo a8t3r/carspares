@@ -15,7 +15,7 @@ object DateHelper {
 
   def yesterdayOrToday(date: Date): String = {
 
-    def toTime(day: String, date: Date) = S ? (day, new DateTime(date).toString("kk:mm"))
+    def toTime(day: String, date: Date) = S ? (day, new DateTime(date).toString("HH:mm"))
 
     val dateTime = new DateTime(date).toLocalDate
     val between: Int = Days.daysBetween(dateTime.toDateMidnight, new DateMidnight()).getDays
