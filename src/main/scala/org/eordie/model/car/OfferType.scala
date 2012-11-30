@@ -30,7 +30,7 @@ object OfferType extends Enumeration with Loggable {
       val query: JObject = managerOffersQuery
       Offer.findAll(query, ("updatedAt" -> -1), Limit(10))
     } catch {
-      case ioe: EOFException => {
+      case ioe: Exception => {
         logger.info("Manager offers error", ioe)
         List[Offer]()
       }
