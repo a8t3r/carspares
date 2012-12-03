@@ -7,12 +7,13 @@ import net.liftweb.json.JsonDSL._
 import net.liftweb.common.{Loggable, Box}
 import net.liftweb.util.StringHelpers
 import com.mongodb.gridfs.{GridFSInputFile, GridFSDBFile}
-import com.mongodb.BasicDBObject
+import com.mongodb.{MongoException, BasicDBObject}
 import net.liftweb.http.BadResponse
 import net.liftweb.http.StreamingResponse
 import net.liftweb.http.InMemoryResponse
 import org.eordie.config.MongoConfig
 import org.eordie.model.car.Offer
+import com.mongodb.MongoException.Network
 
 /**
  * Менеджер для загрузки файлов
@@ -75,7 +76,12 @@ object UploadManager extends RestHelper with Loggable {
   }
 
   def stream(imageName: String, contentTypeFunc: (GridFSDBFile) => List[(String, String)]): () => Box[LiftResponse] = {
-    val image: GridFSDBFile = MongoConfig.mongoGridFS.findOne(imageName)
+    var image: GridFSDBFile = null
+    try {
+      image = MongoConfig.mongoGridFS.findOne(imageName)
+    } catch {
+      case e: Exception => logger.info("Can't find image", e)
+    }
 
     if (image == null) new BadResponse
     else {
